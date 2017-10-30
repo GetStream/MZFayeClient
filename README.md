@@ -6,28 +6,29 @@ This project is a rewritten version of the library made by pcrawfor there: <http
 Improved capture errors, added subscription blocks, ability to set the extension for channel.
 Added auto connection reconnect, and many more...
 
-## Connect to realtime updates for feeds
+## Connect to realtime updates for Stream feeds
 
 ```objc
-    self.client = [[MZFayeClient alloc] initWithURL:[NSURL URLWithString:@"wss://faye.getstream.io/faye"]];
-    
-    [self.client connect:nil failure:^(NSError *error) {
-        NSLog(@"Error connecting: %@", error.userInfo);
-    }];
+MZFayeClient *client = [[MZFayeClient alloc] initWithURL:[NSURL URLWithString:@"wss://faye.getstream.io/faye"]];
 
-    NSString *api_key = @"stream_api_key";
-    NSString *user_id = [NSString stringWithFormat:@"site-%@-feed-%@", @"app_id", @"feedid"];
-    // signature must be created server-side (feed's readOnly token)
-    NSString *signature = @"feedid JWT";
-    NSString *channel = [NSString stringWithFormat:@"/%@", user_id];
-    
-    [self.client setExtension:@{@"user_id": user_id, @"api_key": api_key,
-                                @"signature": signature}
-                   forChannel:@"/meta/subscribe"];
-    
-    [self.client subscribeToChannel:channel success:^(NSDictionary *extension){NSLog(@"Subscribed successfully to channel!");} failure:^(NSError *error) {NSLog(@"Error subscribing to channel: %@", error.userInfo);} receivedMessage:^(NSDictionary *message, NSDictionary *extension) {
-        NSLog(@"Server message %@,\nextension: %@",message,extension);
-    }];
+[client connect:nil failure:^(NSError *error) {
+    NSLog(@"Error connecting: %@", error.userInfo);
+}];
+
+NSString *api_key = @"apikey";
+NSString *user_id = [NSString stringWithFormat:@"site-%@-feed-%@", @"appid", @"feedid"];
+
+// signature must be created server-side (feed's readOnly token)
+NSString *signature = @"JWT-TOKEN";
+NSString *channel = [NSString stringWithFormat:@"/%@", user_id];
+
+[client setExtension:@{@"user_id": user_id, @"api_key": api_key,
+                            @"signature": signature}
+               forChannel:@"/meta/subscribe"];
+
+[client subscribeToChannel:channel success:^(NSDictionary *extension){NSLog(@"Subscribed successfully to channel!");} failure:^(NSError *error) {NSLog(@"Error subscribing to channel: %@", error.userInfo);} receivedMessage:^(NSDictionary *message, NSDictionary *extension) {
+    NSLog(@"Server message %@,\nextension: %@",message,extension);
+}];
 ```
 
 ## How To Use - Example
