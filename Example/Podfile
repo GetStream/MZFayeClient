@@ -1,2 +1,5 @@
-platform :ios, '6.0'
-pod 'MZFayeClient', '~> 1.0.0'
+platform :ios, '7.0'
+
+target 'MZFayeClient' do
+    pod 'MZFayeClient', :path => '../'
+end
